@@ -28,6 +28,7 @@ public class UserSpecification {
         boolean onlyDeleted = text.equalsIgnoreCase("onlyDeleted");
         if (!onlyDeleted) {
             String likePattern = "%" + text.toLowerCase() + "%";
+            predicates.add(builder.like(builder.lower(root.get("name")), likePattern));
             predicates.add(builder.like(builder.lower(root.get("email")), likePattern));
             predicates.add(builder.like(builder.lower(root.get("nickname")), likePattern));
         }
@@ -66,9 +67,8 @@ public class UserSpecification {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
             LocalDateTime fullDate = LocalDate.parse(text, formatter).atStartOfDay();
 
-            Expression<LocalDateTime> truncatedCreatedIn = builder.function(
-                    "DATE_TRUNC", LocalDateTime.class,
-                    builder.literal("day"), root.get("createdIn")
+            Expression<java.sql.Date> truncatedCreatedIn = builder.function(
+                    "DATE", java.sql.Date.class, root.get("createdIn")
             );
             Predicate createdInPredicate = builder.equal(truncatedCreatedIn, fullDate);
 

@@ -75,7 +75,7 @@ public class UserDetailsServiceImp implements UserDetailsService, IUserDetailsSe
     public DataListResponse<UserDetailsResponseImp> list(String timezone, int page, int pageSize, String search, String token)
             throws UsernameNotFoundException {
         DataListResponse<UserDetailsResponseImp> response = new DataListResponse<>();
-        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.asc("deleted").nullsLast(),
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.asc("deleted"),
                 Sort.Order.desc("createdIn"), Sort.Order.desc("changedIn")));
 
         Page<User> users = repository.findAll(UserSpecification.containsTextInAttributes(search), pageable);
