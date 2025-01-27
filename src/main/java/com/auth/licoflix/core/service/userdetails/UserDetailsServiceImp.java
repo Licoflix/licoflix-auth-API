@@ -9,7 +9,6 @@ import com.auth.licoflix.core.mapper.AuthenticationMapper;
 import com.auth.licoflix.core.service.token.TokenService;
 import com.auth.licoflix.utils.exception.ApplicationBusinessException;
 import com.auth.licoflix.utils.response.DataListResponse;
-import com.auth.licoflix.utils.response.DataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -103,17 +102,8 @@ public class UserDetailsServiceImp implements UserDetailsService, IUserDetailsSe
 
     @Override
     @Transactional
-    public DataResponse<UserDetailsResponseImp> delete(Long id, String token, String timezone, Boolean delete) {
-        User user = repository.getReferenceById(id);
-        user.setDeleted(delete);
-        repository.save(user);
-
-        DataResponse<UserDetailsResponseImp> dataResponse = new DataResponse<>();
-        UserDetailsResponseImp response = AuthenticationMapper.userToUserDetails(token, user, timezone);
-        fillAuditFields(response);
-
-        dataResponse.setData(response);
-        return dataResponse;
+    public void delete(Long id, String token, String timezone) {
+        repository.deleteById(id);
     }
 
     private List<UserDetailsResponseImp> fillUsersAuditFieldsInformation(List<UserDetailsResponseImp> list) {

@@ -9,10 +9,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -99,26 +99,21 @@ public class UserInformationController {
     }
 
     @Operation(
-            summary = "Logical Delete or Active User",
-            description = "Logical Delete or Active  User by ID"
+            summary = "Delete User",
+            description = "Delete User by ID"
     )
-    @PutMapping(
-            value = "/{id}"
-    )
-    public DataResponse<UserDetailsResponseImp> logicalDelete(
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void delete(
             @PathVariable(value = "id") Long id,
             @RequestHeader(name = "Authorization") String token,
-            @RequestHeader(name = "Timezone") String timezone,
-            @RequestBody Map<String, Boolean> requestBody
+            @RequestHeader(name = "Timezone") String timezone
     ) throws Exception {
-        logger.info("Logical Delete method" + STARTED);
-        logger.debug("Logical Delete method, Params: ID: {}, Request: {}, Timezone: {}, Token: {}", id, requestBody.get("delete"),
-                timezone, token);
+        logger.info("Delete method" + STARTED);
+        logger.debug("Delete method, Params: ID: {}, Timezone: {}, Token: {}", id, timezone, token);
 
-        DataResponse<UserDetailsResponseImp> response = service.delete(id, token, timezone, requestBody.get("delete"));
+        service.delete(id, token, timezone);
 
-        logger.debug("Logical Delete method, Response: {}", response.getData());
-        logger.info("Logical Delete method" + FINISHED);
-        return response;
+        logger.info("Delete method" + FINISHED);
     }
 }

@@ -19,7 +19,7 @@ public interface IUserDetailsService {
 
     User loadUserEntityByToken(String token, String timezone) throws UsernameNotFoundException, ApplicationBusinessException;
 
-    DataResponse<UserDetailsResponseImp> delete(Long id, String token, String timezone, Boolean delete) throws ApplicationBusinessException, IOException;
+    void delete(Long id, String token, String timezone) throws ApplicationBusinessException, IOException;
 
     DataListResponse<UserDetailsResponseImp> list(String timezone, int page, int pageSize, String search, String token) throws UsernameNotFoundException, ApplicationBusinessException, IOException;
 }
