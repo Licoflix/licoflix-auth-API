@@ -42,7 +42,7 @@ public class User extends AuditFields implements UserDetails, Serializable {
     private boolean admin = false;
 
     @Lob
-    @Column(name = "avatar", columnDefinition = "LONGBLOB")
+    @Column(name = "avatar")
     private byte[] avatar;
 
     @Column(name = "deleted", nullable = false)
