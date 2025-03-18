@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -28,9 +29,6 @@ public class TokenService implements ITokenService {
     @Value("${api.security.token.secret}")
     private String secretKey;
 
-    @Value("${api.security.jwt.expiration}")
-    private long jwtExpiration;
-
     @Override
     public String generateToken(UserDetails userDetails) {
         return Jwts
@@ -38,8 +36,8 @@ public class TokenService implements ITokenService {
                 .setClaims(new HashMap<>())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + Duration.ofDays(30).toMillis()))
                 .compact();
     }
 
