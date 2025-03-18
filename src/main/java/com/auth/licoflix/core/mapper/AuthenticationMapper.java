@@ -6,8 +6,8 @@ import com.auth.licoflix.core.domain.model.user.User;
 import com.auth.licoflix.utils.date.DateUtils;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -61,7 +61,7 @@ public class AuthenticationMapper {
         return list;
     }
 
-    public static void edit(User entity, RegisterRequest request, Long editedBy) throws IOException {
+    public static void edit(User entity, RegisterRequest request, Long editedBy) {
         if (!Objects.equals(entity.getName(), request.name())) {
             entity.setName(request.name());
         }
@@ -79,6 +79,10 @@ public class AuthenticationMapper {
             entity.setAvatar(avatarBytes);
         } else {
             entity.setAvatar(null);
+        }
+
+        if (request.password() != null && !request.password().isEmpty()) {
+            entity.setPassword(new BCryptPasswordEncoder().encode(request.password()));
         }
 
         entity.setChangedBy(editedBy);
