@@ -8,12 +8,12 @@ import java.util.Locale;
 
 public class DateUtils {
     public static String formatLocalDateTimeToString(LocalDateTime dateTime, String timeZone) {
-        String formattedDate = "";
+        String formattedDate;
+        DateTimeFormatter formatter;
         String countryCode = ZoneId.of(timeZone).getId().split("/")[1];
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy");
 
         if (countryCode.equals("Sao_Paulo")) {
-            formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy");
+            formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy", new Locale("pt", "BR"));
             formattedDate = dateTime.format(formatter);
             int position = formattedDate.indexOf("de");
             if (position != -1 && position + 3 < formattedDate.length()) {
