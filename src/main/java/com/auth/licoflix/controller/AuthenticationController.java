@@ -11,8 +11,6 @@ import com.auth.licoflix.utils.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,10 +20,6 @@ import java.io.IOException;
 @RequestMapping(value = "/auth")
 @CrossOrigin(origins = "${api.access.control.allow.origin}")
 public class AuthenticationController {
-    private static final String STARTED = " - Started";
-    private static final String FINISHED = " - Finished";
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
-
     private final IAuthenticationService authenticationService;
 
     @Operation(
@@ -40,17 +34,11 @@ public class AuthenticationController {
     public DataResponse<UserDetailsResponseImp> login(
             @RequestBody @Valid LoginRequest bodyRequest,
             @RequestHeader(name = "Timezone") String timezone) throws ApplicationBusinessException {
-        logger.info("Login method" + STARTED);
-        logger.debug("Login method, Params: Request: {}, Timezone: {}", bodyRequest, timezone);
-
         DataResponse<UserDetailsResponseImp> response = new DataResponse<>();
         DataRequest<LoginRequest> request = new DataRequest<>(bodyRequest);
 
         response.setData(authenticationService.login(request, timezone));
         response.setMessage(DomainReturnCode.SUCCESSFUL_OPERATION.getDesc());
-
-        logger.debug("Login method, Response: {}", response);
-        logger.info("Login method" + FINISHED);
         return response;
     }
 
@@ -67,17 +55,11 @@ public class AuthenticationController {
             @RequestBody RegisterRequest bodyRequest,
             @RequestHeader(name = "Timezone") String timezone,
             @RequestHeader(name = "Authorization", required = false) String token) throws Exception {
-        logger.info("Register method" + STARTED);
-        logger.debug("Register method, Params: Request: {}, Timezone: {}", bodyRequest, timezone);
-
         DataResponse<UserDetailsResponseImp> response = new DataResponse<>();
         DataRequest<RegisterRequest> request = new DataRequest<>(bodyRequest);
 
         response.setData(authenticationService.register(request, timezone, token));
         response.setMessage(DomainReturnCode.SUCCESSFUL_OPERATION.getDesc());
-
-        logger.debug("Register method, Response: {}", response);
-        logger.info("Register method" + FINISHED);
         return response;
     }
 
@@ -94,17 +76,11 @@ public class AuthenticationController {
             @RequestBody RegisterRequest bodyRequest,
             @RequestHeader(name = "Timezone") String timezone,
             @RequestHeader(name = "Authorization", required = false) String token) throws ApplicationBusinessException, IOException {
-        logger.info("Edit method" + STARTED);
-        logger.debug("Edit method, Params: Request: {}, Timezone: {}, Token: {}", bodyRequest, timezone, token);
-
         DataResponse<UserDetailsResponseImp> response = new DataResponse<>();
         DataRequest<RegisterRequest> request = new DataRequest<>(bodyRequest);
 
         response.setData(authenticationService.edit(request, timezone, token));
         response.setMessage(DomainReturnCode.SUCCESSFUL_OPERATION.getDesc());
-
-        logger.debug("Edit method, Response: {}", response);
-        logger.info("Edit method" + FINISHED);
         return response;
     }
 }
